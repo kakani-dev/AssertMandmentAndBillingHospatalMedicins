@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../NeuroPi"
+		},
+		{
+			"path": "../starter_ui_npi"
+		},
+		{
+			"path": "../ui_testing"
+		}
+	],
+	"settings": {}
+}
