@@ -7,7 +7,7 @@ import { Card } from "components/ui";
 
 // ----------------------------------------------------------------------
 
-export function Calendar({ events = [] }) {
+export function Calendar({ events = [], onDateSelect }) {
   const handleDayCreate = (dObj, dStr, fp, dayElem) => {
     // Format date string to match YYYY-MM-DD
     const date = dayElem.dateObj.toISOString().split("T")[0];
@@ -24,6 +24,8 @@ export function Calendar({ events = [] }) {
         isCalendar
         options={{
           onDayCreate: handleDayCreate,
+          onChange: (selectedDates, dateStr) =>
+            onDateSelect && onDateSelect(dateStr),
         }}
       />
     </Card>
@@ -32,4 +34,5 @@ export function Calendar({ events = [] }) {
 
 Calendar.propTypes = {
   events: PropTypes.arrayOf(PropTypes.string),
+  onDateSelect: PropTypes.func,
 };

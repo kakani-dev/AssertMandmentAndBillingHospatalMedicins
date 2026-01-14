@@ -24,6 +24,7 @@ function DoctorContent() {
   const { appointments, setAppointments, addAppointment } =
     useAppointmentsContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   // Extract dates from appointments for the calendar
   const eventDates = appointments
@@ -35,6 +36,16 @@ function DoctorContent() {
         : date.toISOString().split("T")[0]; // YYYY-MM-DD
     })
     .filter(Boolean);
+
+  const handleDateSelect = (dateStr) => {
+    setSelectedDate(dateStr);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedDate(null);
+  };
 
   return (
     <Page title="Doctor Dashboard">
@@ -67,15 +78,16 @@ function DoctorContent() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:sticky lg:top-20 lg:grid-cols-1 lg:gap-6 lg:self-start">
               <NextPatient />
               <PatientsChart />
-              <Calendar events={eventDates} />
+              <Calendar events={eventDates} onDateSelect={handleDateSelect} />
             </div>
           </div>
         </div>
 
         <AddAppointmentModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleCloseModal}
           onAdd={addAppointment}
+          initialDate={selectedDate}
         />
       </div>
     </Page>
