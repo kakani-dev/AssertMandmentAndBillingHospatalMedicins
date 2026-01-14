@@ -4,6 +4,7 @@ import { Navigate } from "react-router";
 // Local Imports
 import { AppLayout } from "app/layouts/AppLayout";
 import { DynamicLayout } from "app/layouts/DynamicLayout";
+import DoctorDashboard from "app/pages/dashboards/doctor";
 import AuthGuard from "middleware/AuthGuard";
 
 // ----------------------------------------------------------------------
@@ -243,6 +244,28 @@ const protectedRoutes = {
                 Component: (await import("app/pages/components/carousel"))
                   .default,
               }),
+            },
+          ],
+        },
+        {
+          path: "/dashboards",
+          children: [
+            {
+              path: "doctor",
+              children: [
+                {
+                  index: true,
+                  element: <DoctorDashboard />,
+                },
+                {
+                  path: "add-appointment",
+                  lazy: async () => ({
+                    Component: (
+                      await import("app/pages/dashboards/doctor/AddAppointmentPage")
+                    ).default,
+                  }),
+                },
+              ],
             },
           ],
         },

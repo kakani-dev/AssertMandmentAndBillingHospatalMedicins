@@ -1,7 +1,11 @@
+// Import Dependencies
+import { useState } from "react";
+import PropTypes from "prop-types";
+
 // Local Imports
 import { AppointmentsRequestsCard } from "./AppointmentsRequestsCard";
 
-const requests = [
+const initialRequests = [
   {
     uid: 1,
     name: "Travis Fuller",
@@ -30,7 +34,23 @@ const requests = [
 
 // ----------------------------------------------------------------------
 
-export function AppointmentsRequestsList() {
+export function AppointmentsRequestsList({ onAcceptRequest }) {
+  const [requests, setRequests] = useState(initialRequests);
+
+  const handleAccept = (uid) => {
+    const request = requests.find((r) => r.uid === uid);
+    if (onAcceptRequest && request) {
+      onAcceptRequest(request);
+    }
+    setRequests((current) => current.filter((req) => req.uid !== uid));
+    alert("Appointment Accepted and Added to Users Table");
+  };
+
+  const handleDecline = (uid) => {
+    setRequests((current) => current.filter((req) => req.uid !== uid));
+    alert("Appointment Declined");
+  };
+
   return (
     <div className="mt-4 sm:mt-5 lg:mt-6">
       <div className="flex h-8 items-center justify-between">
@@ -53,9 +73,21 @@ export function AppointmentsRequestsList() {
             request={request.request}
             date={request.date}
             time={request.time}
+            onAccept={() => handleAccept(request.uid)}
+            onDecline={() => handleDecline(request.uid)}
+            onView={() => alert(`View details for ${request.name}`)}
           />
         ))}
+        {requests.length === 0 && (
+          <div className="col-span-full py-8 text-center text-sm text-gray-500 dark:text-dark-300">
+            No new appointment requests
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
+AppointmentsRequestsList.propTypes = {
+  onAcceptRequest: PropTypes.func,
+};

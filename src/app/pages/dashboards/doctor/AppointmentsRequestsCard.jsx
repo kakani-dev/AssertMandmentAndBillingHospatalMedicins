@@ -17,6 +17,9 @@ export function AppointmentsRequestsCard({
   request,
   date,
   time,
+  onAccept,
+  onDecline,
+  onView,
 }) {
   return (
     <Card className="space-y-4 p-4">
@@ -45,6 +48,7 @@ export function AppointmentsRequestsCard({
             isIcon
             color="success"
             variant="soft"
+            onClick={onAccept}
           >
             <CheckIcon className="size-4" />
           </Button>
@@ -53,11 +57,12 @@ export function AppointmentsRequestsCard({
             isIcon
             color="error"
             variant="soft"
+            onClick={onDecline}
           >
             <XMarkIcon className="size-4" />
           </Button>
         </div>
-        <Button className="size-7 rounded-full" isIcon>
+        <Button className="size-7 rounded-full" isIcon onClick={onView}>
           <ArrowUpRightIcon className="size-3.5" />
         </Button>
       </div>
@@ -71,4 +76,7 @@ AppointmentsRequestsCard.propTypes = {
   request: PropTypes.string,
   date: PropTypes.string,
   time: PropTypes.string,
+  onAccept: PropTypes.func,
+  onDecline: PropTypes.func,
+  onView: PropTypes.func,
 };

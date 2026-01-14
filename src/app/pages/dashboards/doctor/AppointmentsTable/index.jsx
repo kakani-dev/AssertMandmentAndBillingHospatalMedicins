@@ -21,26 +21,26 @@ import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { useSkipper } from "utils/react-table/useSkipper";
 import { MenuAction } from "./MenuActions";
 import { columns } from "./columns";
-import { appointmentsList } from "./fakeData";
+
 import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
+
+// ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
 const isSafari = getUserAgentBrowser() === "Safari";
 
-export function AppointmentsTable() {
+export function AppointmentsTable({ data, setData }) {
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
   const theadRef = useRef();
 
   const { height: theadHeight } = useBoxSize({ ref: theadRef });
 
-  const [appointments, setAppointments] = useState([...appointmentsList]);
-
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
 
   const table = useReactTable({
-    data: appointments,
+    data: data,
     columns: columns,
     state: {
       globalFilter,
@@ -50,7 +50,7 @@ export function AppointmentsTable() {
       updateData: (rowIndex, columnId, value) => {
         // Skip page index reset until after next rerender
         skipAutoResetPageIndex();
-        setAppointments((old) =>
+        setData((old) =>
           old.map((row, index) => {
             if (index === rowIndex) {
               return {
@@ -65,7 +65,7 @@ export function AppointmentsTable() {
       deleteRow: (row) => {
         // Skip page index reset until after next rerender
         skipAutoResetPageIndex();
-        setAppointments((old) =>
+        setData((old) =>
           old.filter((oldRow) => oldRow.user_id !== row.original.user_id),
         );
       },
@@ -73,7 +73,7 @@ export function AppointmentsTable() {
         // Skip page index reset until after next rerender
         skipAutoResetPageIndex();
         const rowIds = rows.map((row) => row.original.user_id);
-        setAppointments((old) =>
+        setData((old) =>
           old.filter((row) => !rowIds.includes(row.user_id)),
         );
       },
@@ -95,7 +95,7 @@ export function AppointmentsTable() {
     autoResetPageIndex,
   });
 
-  useDidUpdate(() => table.resetRowSelection(), [appointments.length]);
+  useDidUpdate(() => table.resetRowSelection(), [data.length]);
 
   return (
     <div className="mt-4 sm:mt-5 lg:mt-6">
@@ -132,9 +132,9 @@ export function AppointmentsTable() {
                             {header.isPlaceholder
                               ? null
                               : flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext(),
-                                )}
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
                           </span>
                           <TableSortIcon sorted={header.column.getIsSorted()} />
                         </div>
@@ -157,8 +157,8 @@ export function AppointmentsTable() {
                     className={clsx(
                       "relative border-y border-transparent border-b-gray-200 dark:border-b-dark-500",
                       row.getIsSelected() &&
-                        !isSafari &&
-                        "row-selected after:pointer-events-none after:absolute after:inset-0 after:z-2 after:h-full after:w-full after:border-3 after:border-transparent after:bg-primary-500/10 ltr:after:border-l-primary-500 rtl:after:border-r-primary-500",
+                      !isSafari &&
+                      "row-selected after:pointer-events-none after:absolute after:inset-0 after:z-2 after:h-full after:w-full after:border-3 after:border-transparent after:bg-primary-500/10 ltr:after:border-l-primary-500 rtl:after:border-r-primary-500",
                     )}
                   >
                     {row.getVisibleCells().map((cell) => {

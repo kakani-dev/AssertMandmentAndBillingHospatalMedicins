@@ -11,6 +11,8 @@ import { RightSidebar } from "components/template/RightSidebar";
 import { LanguageSelector } from "components/template/LaguageSelector";
 import { Search } from "components/template/Search";
 import { useThemeContext } from "app/contexts/theme/context";
+import { useAuthContext } from "app/contexts/auth/context";
+import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +38,7 @@ function SlashIcon(props) {
 
 export function Header() {
   const { cardSkin } = useThemeContext();
+  const { logout } = useAuthContext();
 
   return (
     <header
@@ -78,6 +81,14 @@ export function Header() {
         <Notifications />
         <RightSidebar />
         <LanguageSelector />
+        <Button
+          onClick={logout}
+          variant="flat"
+          isIcon
+          className="relative size-9 rounded-full"
+        >
+          <ArrowLeftStartOnRectangleIcon className="size-6 text-red-500 dark:text-red-500" />
+        </Button>
       </div>
     </header>
   );
